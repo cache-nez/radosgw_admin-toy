@@ -54,26 +54,31 @@ namespace {
 void handle_user_commands(const parsed_options& options, variables_map& var_map) {
     options_description description_user = set_user_commands_description();
     std::vector<std::string> unrecognized = collect_unrecognized(options.options, exclude_positional);
-    parsed_options new_options = command_line_parser{unrecognized}
-            .options(description_user)
-            .allow_unregistered()
-            .run();
-    store(new_options, var_map);
-    notify(var_map);
+    try {
+        parsed_options new_options = command_line_parser{unrecognized}
+                .options(description_user)
+                .allow_unregistered()
+                .run();
+        store(new_options, var_map);
+        notify(var_map);
 
-    std::string command = var_map[COMMAND_GROUP].as<std::vector<std::string>>()[1];
-    if (command == "create") {
-        handle_user_create(new_options, var_map);
-        return;
+        std::string command = var_map[COMMAND_GROUP].as<std::vector<std::string>>()[1];
+        if (command == "create") {
+            handle_user_create(new_options, var_map);
+            return;
+        }
+        if (command == "delete") {
+            handle_user_delete(var_map);
+            return;
+        }
+        if (command == "info") {
+            handle_user_info(var_map);
+            return;
+        }
+        unrecognized_command_message(command);
+        help_message();
+    } catch (const error& ex) {
+        std::cout << "Failed to parse passed options" << std::endl;
+        help_message();
     }
-    if (command == "delete") {
-        handle_user_delete(var_map);
-        return;
-    }
-    if (command == "info") {
-        handle_user_info(var_map);
-        return;
-    }
-    unrecognized_command_message(command);
-    help_message();
 }
