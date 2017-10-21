@@ -5,10 +5,10 @@ $ cmake .
 
 $ make
 
-$ ./radosgw-admin [options]
+$ ./radosgw-admin <cmd> [options...]
 
 
-Available options:
+Available commands and options:
 
 --help
 
