@@ -37,16 +37,29 @@ namespace {
                       .options(user_desc)
                       .run(),
               var_map);
+        if (!var_map.count(UID) || !var_map.count(DISPLAY_NAME) || !var_map.count(EMAIL)) {
+            std::cout << "The following options are required for user create command: "
+                      << UID << ", " << DISPLAY_NAME << ", " << EMAIL << std::endl;
+            return;
+        }
         std::cout << "User created with uid " << var_map[UID].as<int>()
                   << ", display name " << var_map[DISPLAY_NAME].as<std::string>()
                   << " and email " << var_map[EMAIL].as<std::string>() << std::endl;
     }
 
     void handle_user_delete(const variables_map& var_map) {
+        if (!var_map.count(UID)) {
+            std::cout << UID << " option is required for user delete command" << std::endl;
+            return;
+        }
         std::cout << "Deleted user " << var_map[UID].as<std::string>() << std::endl;
     }
 
     void handle_user_info(const variables_map& var_map) {
+        if (!var_map.count(UID)) {
+            std::cout << UID << " option is required for user info command" << std::endl;
+            return;
+        }
         std::cout << "Information about user " << var_map[UID].as<std::string>() << std::endl;
     }
 } // namespace
