@@ -1,6 +1,10 @@
 ## A toy program illustrating usage of boost::program_options for arguments parsing
 ### Usage:
 
+You may need to add the following line to CMakeLists.txt:
+
+set(BOOST_ROOT /dir/containing/boost)
+
 $ cmake .
 
 $ make
