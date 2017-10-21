@@ -40,11 +40,12 @@ void handle_commands(int argc, const char *argv[]) {
     if (var_map.count(HELP_COMMAND))
         help_message();
     else if (var_map.count(COMMAND_GROUP)) {
-        if (var_map[COMMAND_GROUP].as<std::vector<std::string>>()[0] == "user") {
+        std::string command_group = var_map[COMMAND_GROUP].as<std::vector<std::string>>()[0];
+        if (command_group == "user") {
             handle_user_commands(parsed_options, var_map);
         }
         else {
-            unrecognized_command_message();
+            unrecognized_command_message(command_group);
             help_message();
         }
     }

@@ -17,6 +17,6 @@ struct description {
 };
 
 void help_message();
-void unrecognized_command_message();
+void unrecognized_command_message(const std::string& command);
 
 #endif //RADOSGW_ADMIN_COMMON_H

@@ -74,6 +74,6 @@ void handle_user_commands(const parsed_options& options, variables_map& var_map)
         handle_user_info(var_map);
         return;
     }
-    unrecognized_command_message();
+    unrecognized_command_message(command);
     help_message();
 }

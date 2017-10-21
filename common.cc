@@ -7,8 +7,8 @@
 
 using std::cout;
 
-void unrecognized_command_message() {
-    cout << "Unrecognized command" << std::endl;
+void unrecognized_command_message(const std::string& command) {
+    cout << "Unrecognized command: " << command << std::endl;
 }
 
 void help_message() {
