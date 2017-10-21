@@ -29,9 +29,11 @@ namespace {
 void handle_commands(int argc, const char *argv[]) {
     variables_map var_map;
     description general = set_general_options_description();
-    command_line_parser parser{argc, argv};
-    parser.options(general.named_options).positional(general.pos_options).allow_unregistered();
-    parsed_options parsed_options = parser.run();
+    parsed_options parsed_options = command_line_parser{argc, argv}
+            .options(general.named_options)
+            .positional(general.pos_options)
+            .allow_unregistered()
+            .run();
     store(parsed_options, var_map);
     notify(var_map);
 
@@ -39,9 +41,11 @@ void handle_commands(int argc, const char *argv[]) {
         help_message();
     else if (var_map.count(COMMAND_GROUP)) {
         if (var_map[COMMAND_GROUP].as<std::vector<std::string>>()[0] == "user") {
-            handle_user_commands(var_map, parsed_options);
+            handle_user_commands(parsed_options, var_map);
         }
-        else
+        else {
+            unrecognized_command_message();
             help_message();
+        }
     }
 }

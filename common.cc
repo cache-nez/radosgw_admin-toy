@@ -7,6 +7,10 @@
 
 using std::cout;
 
+void unrecognized_command_message() {
+    cout << "Unrecognized command" << std::endl;
+}
+
 void help_message() {
     cout << "usage: radosgw-admin <cmd> [options...]" << std::endl;
     cout << "commands:\n";

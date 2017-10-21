@@ -17,5 +17,6 @@ struct description {
 };
 
 void help_message();
+void unrecognized_command_message();
 
 #endif //RADOSGW_ADMIN_COMMON_H

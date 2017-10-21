@@ -30,14 +30,14 @@ namespace {
         return user_create_desc;
     }
 
-    void handle_user_create(variables_map& var_map, parsed_options& parsed_options) {
+    void handle_user_create(const parsed_options& parsed_options, variables_map& var_map) {
         options_description user_desc = set_user_create_options();
         std::vector<std::string> unrecognized = collect_unrecognized(parsed_options.options, exclude_positional);
         store(command_line_parser(unrecognized)
                       .options(user_desc)
                       .run(),
               var_map);
-        std::cout << "User created with uid" << var_map[UID].as<int>()
+        std::cout << "User created with uid " << var_map[UID].as<int>()
                   << ", display name " << var_map[DISPLAY_NAME].as<std::string>()
                   << " and email " << var_map[EMAIL].as<std::string>() << std::endl;
     }
@@ -51,18 +51,19 @@ namespace {
     }
 } // namespace
 
-void handle_user_commands(variables_map& var_map, parsed_options& parsed_options) {
+void handle_user_commands(const parsed_options& options, variables_map& var_map) {
     options_description description_user = set_user_commands_description();
-    std::vector<std::string> unrecognized = collect_unrecognized(parsed_options.options, exclude_positional);
-    auto parser = command_line_parser(unrecognized);
-    parser.options(description_user).allow_unregistered();
-    auto new_options = parser.run();
+    std::vector<std::string> unrecognized = collect_unrecognized(options.options, exclude_positional);
+    parsed_options new_options = command_line_parser{unrecognized}
+            .options(description_user)
+            .allow_unregistered()
+            .run();
     store(new_options, var_map);
     notify(var_map);
 
     std::string command = var_map[COMMAND_GROUP].as<std::vector<std::string>>()[1];
     if (command == "create") {
-        handle_user_create(var_map, new_options);
+        handle_user_create(new_options, var_map);
         return;
     }
     if (command == "delete") {
@@ -73,5 +74,6 @@ void handle_user_commands(variables_map& var_map, parsed_options& parsed_options
         handle_user_info(var_map);
         return;
     }
+    unrecognized_command_message();
     help_message();
 }
